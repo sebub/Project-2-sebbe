@@ -6,37 +6,39 @@
 
 int main(void)
 {
-    srand(time(NULL));
+    srand(time(NULL)); //Initiates random to enable rand() funk to work
     int Mode, Columns, Rows, connectToWin;
     scan_setting(&Mode,&Columns,&Rows,&connectToWin);
-
     game_of_lines(Mode,Columns,Rows,connectToWin);
 
 }
-void scan_setting(int *gameMode, int *Columns, int *Rows, int *connetToWin){
-    while(1) {
+void scan_setting(int *gameMode, int *Columns, int *Rows, int *connetToWin){ //Scans input for the game
+    while(1) //Runs loop until user inputs valid game mode: 1 for singleplayer 2 for multiplayer
+    {
         printf("Enter 1 for singleplayer, enter 2 for multiplayer");
         fflush(stdin);
         scanf("%d", gameMode);
         if((*gameMode == 1)||(*gameMode == 2))
             break;
     }
-    while(1) {
+    while(1) //Runs loop until user inputs columns greater than 2
+    {
         printf("Enter size of map");
         printf("Columns:");
         fflush(stdin);
         scanf("%d",Columns);
-        if(Columns>0)
+        if(Columns>1)
             break;
     }
 
-    while(1) {
+    while(1) //Runs loop until user inputs rows greater than 2
+    {
         printf("Rows:");
         fflush(stdin);
         scanf("%d",Rows);
         if(Rows>0)
             break;
-}
+    }
 
     printf("Enter number of connections to win:");
     scanf("%d",connetToWin);
@@ -61,19 +63,17 @@ int game_of_lines(int gameMode, int columns, int rows, int connetToWin) {
 
 void print_arena(int rows, int columns,int (*board)[rows][columns]){
     for (int i = 0; i < columns; ++i) {
-        printf("|%d| ",i);
-    }
+        printf("|%d| ",i);}
+
     printf("\n");
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < columns; ++j) {
             if((*board)[i][j] == 1)
                 printf("|x| ");
             else if((*board)[i][j]== 2 || (*board)[i][j]== 3){
-                printf("|o| ");
-            }
+                printf("|o| ");}
             else
-                printf("|_| ");
-        }
+                printf("|_| ");}
         printf("\n");
     }
 }
@@ -81,27 +81,21 @@ void print_arena(int rows, int columns,int (*board)[rows][columns]){
 void reset_arena(int rows, int columns,int (*board)[rows][columns]){
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < columns; ++j) {
-            (*board)[i][j] = 0;
-        }
+            (*board)[i][j] = 0;}
     }
 }
 
 void scan_move(int mode,int rows, int columns, int (*board)[rows][columns]){
     int move;
     if(mode == 1){
-
         update_arena(1, move, rows, columns, board);
         update_arena(3, move, rows, columns, board);
         print_arena(rows, columns, board);
 
-
-
     }
     if(mode == 2) {
-
         update_arena(1, move, rows, columns, board);
         print_arena(rows, columns, board);
-
         update_arena(2, move, rows, columns, board);
         print_arena(rows, columns, board);
     }
@@ -129,16 +123,12 @@ void update_arena(int player, int move,int columns, int rows, int(*board)[rows][
     }
     while(i <= rows) {
         if((*board)[rows-i-1][move-1]==0) {
-            (*board)[rows - i - 1][move-1] = player;
-            break;
+            (*board)[rows - i - 1][move-1] = player; break;
         }
         i++;
     }
 }
 
-void check_if_valid(int move,int columns, int rows, int(*board)[rows][columns]){
-
-}
 
 int ai_move(int columns){
     return (rand()%columns);
