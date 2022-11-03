@@ -87,7 +87,6 @@ int scan_move(int (*arena)[rows][columns]) {
                 break;
             }
 
-
             update_arena(3, &moveColumn, &moveRow, arena);
             if (check_horizontal(moveColumn, moveRow, 1, arena) == 1
                 || check_vertical(3, moveColumn, arena) == 1
@@ -112,10 +111,10 @@ int scan_move(int (*arena)[rows][columns]) {
 
 
             update_arena(2, &moveColumn, &moveRow, arena);
-            if (check_horizontal(moveColumn, moveRow, 1, arena) == 1
-                || check_vertical(2, moveColumn, arena) == 1
-                || check_diagonal(2, moveColumn, moveRow, arena) == 1
-                || check_diagonal2(2, moveColumn, moveRow, arena) == 1) {
+            if ((check_horizontal(moveColumn, moveRow, 1, arena) == 1)
+                || (check_vertical(2, moveColumn, arena) == 1)
+                || (check_diagonal(2, moveColumn, moveRow, arena) == 1)
+                || (check_diagonal2(2, moveColumn, moveRow, arena) == 1)) {
                 print_arena(arena);
                 break;
             }
@@ -188,8 +187,8 @@ int check_vertical(int player, int moveColumn, int (*board)[rows][columns]) {
 }
 
 int check_diagonal(int player, int moveColumn, int moveRows, int (*board)[rows][columns]) {
-    int count = 1;
-    for (int j = 1; columns > j; ++j) {
+    int count = 0;
+    for (int j = 0; columns > j; ++j) {
         if ((*board)[moveRows - j][moveColumn - j] == player) {
             count++;
         } else if (count == wincon) {
@@ -211,24 +210,25 @@ int check_diagonal(int player, int moveColumn, int moveRows, int (*board)[rows][
 }
 
 int check_diagonal2(int player, int moveColumn, int moveRows, int (*board)[rows][columns]) {
-    int count = 1;
-    for (int j = 1; columns > j; ++j) {
-        if ((*board)[moveRows - j][moveColumn + j] == player) {
+    int count = 0;
+    for (int j = 0; columns > j; ++j) {
+        if ((*board)[moveRows + j][moveColumn - j] == player) {
             count++;
         } else if (count == wincon) {
             printf("'Fail 3'");
             return winnerMessage(player);
 
-        } else if ((*board)[moveRows - j][moveColumn - j] != player) {
+        } else if ((*board)[moveRows + j][moveColumn - j] != player) {
             count = 0;
             for (int i = 0; columns > i; ++i) {
-                if ((*board)[moveRows + i][moveColumn - i] == player)
+                printf("(%d,%d)", moveRows-i, moveColumn+i);
+                if ((*board)[moveRows - i][moveColumn + i] == player)
                     count++;
                 if (count == wincon) {
                     printf("'Fail 4'");
                     return winnerMessage(player);
                 }
-            }
+            } break;
         }
     }
     return 0;
