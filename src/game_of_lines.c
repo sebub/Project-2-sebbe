@@ -79,10 +79,9 @@ int scan_move(int (*arena)[rows][columns]) {
         int moveRow;
         if (gameMode == 1) {
             update_arena(1, &moveColumn, &moveRow, arena);
-            if (check_horizontal(moveColumn, moveRow, 1, arena) == 1
-                || check_vertical(1, moveColumn, arena) == 1
-                || check_diagonal(1, moveColumn, moveRow, arena) == 1
-                || check_diagonal2(1, moveColumn, moveRow, arena) == 1) {
+            if ((check_horizontal(moveColumn, moveRow, 1, arena)) == 1
+                || (check_vertical(1, moveColumn, arena) == 1)
+                || (check_diagonal(1, moveColumn, moveRow, arena) == 1)) {
                 print_arena(arena);
                 break;
             }
@@ -90,8 +89,7 @@ int scan_move(int (*arena)[rows][columns]) {
             update_arena(3, &moveColumn, &moveRow, arena);
             if (check_horizontal(moveColumn, moveRow, 1, arena) == 1
                 || check_vertical(3, moveColumn, arena) == 1
-                || check_diagonal(3, moveColumn, moveRow, arena) == 1
-                || check_diagonal2(3, moveColumn, moveRow, arena) == 1) {
+                || check_diagonal(3, moveColumn, moveRow, arena) == 1) {
                 print_arena(arena);
                 break;
             }
@@ -103,7 +101,7 @@ int scan_move(int (*arena)[rows][columns]) {
             if (check_horizontal(moveColumn, moveRow, 1, arena) == 1
                 || check_vertical(1, moveColumn, arena) == 1
                 || check_diagonal(1, moveColumn, moveRow, arena) == 1
-                || check_diagonal2(1, moveColumn, moveRow, arena) == 1) {
+                || (check_diagonal2(1,moveColumn,moveRow,arena)== 1)){
                 print_arena(arena);
                 break;
             }
@@ -111,10 +109,10 @@ int scan_move(int (*arena)[rows][columns]) {
 
 
             update_arena(2, &moveColumn, &moveRow, arena);
-            if ((check_horizontal(moveColumn, moveRow, 1, arena) == 1)
+            if ((check_horizontal(moveColumn, moveRow, 2, arena) == 1)
                 || (check_vertical(2, moveColumn, arena) == 1)
                 || (check_diagonal(2, moveColumn, moveRow, arena) == 1)
-                || (check_diagonal2(2, moveColumn, moveRow, arena) == 1)) {
+                || (check_diagonal2(2,moveColumn,moveRow,arena)== 1)) {
                 print_arena(arena);
                 break;
             }
@@ -188,51 +186,65 @@ int check_vertical(int player, int moveColumn, int (*board)[rows][columns]) {
 
 int check_diagonal(int player, int moveColumn, int moveRows, int (*board)[rows][columns]) {
     int count = 0;
-    for (int j = 0; columns > j; ++j) {
+    int j = 0;
+    int i = 0;
+    while ((moveRows - j >= 0) && (moveColumn - j >= 0)) {
         if ((*board)[moveRows - j][moveColumn - j] == player) {
+            printf("%d %d", moveRows - j, moveColumn - j);
             count++;
         } else if (count == wincon) {
             printf("'Fail 1'");
             return winnerMessage(player);
         } else if ((*board)[moveRows - j][moveColumn - j] != player) {
             count = 0;
-            for (int i = 0; columns > i; ++i) {
+            while (moveRows + i <= rows && moveColumn + i <= columns) {
                 if ((*board)[moveRows + i][moveColumn + i] == player)
                     count++;
                 if (count == wincon) {
                     printf("'Fail 2'");
                     return winnerMessage(player);
                 }
+                i++;
             }
         }
+        j++;
     }
     return 0;
 }
 
 int check_diagonal2(int player, int moveColumn, int moveRows, int (*board)[rows][columns]) {
     int count = 0;
-    for (int j = 0; columns > j; ++j) {
+    int count2 =0;
+    int j = 0;
+    int i = 0;
+    while ((moveRows + j < rows) && (moveColumn - j >= 0)) {
+        printf("hello\n");
+        printf("(%d,%d) dirgo 2\n", moveRows + j, moveColumn - j);
         if ((*board)[moveRows + j][moveColumn - j] == player) {
-            count++;
-        } else if (count == wincon) {
+            ++count;
+            printf("Count is %d\n",count);
+        }
+        if (count == wincon) {
             printf("'Fail 3'");
             return winnerMessage(player);
-
         } else if ((*board)[moveRows + j][moveColumn - j] != player) {
-            count = 0;
-            for (int i = 0; columns > i; ++i) {
-                printf("(%d,%d)", moveRows-i, moveColumn+i);
-                if ((*board)[moveRows - i][moveColumn + i] == player)
-                    count++;
-                if (count == wincon) {
+            while (moveRows - i <= 0 && moveColumn + i <= columns) {
+                if ((*board)[moveRows - i][moveColumn + i] == player) {
+                    count2++;
+                    printf("count 2 is %d",count2);
+                }
+                if (count2 == wincon) {
                     printf("'Fail 4'");
                     return winnerMessage(player);
                 }
-            } break;
+                i++;
+            }
         }
+        j++;
     }
     return 0;
 }
+
 
 int ai_move() {
     return (rand() % columns);
