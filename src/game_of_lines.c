@@ -52,9 +52,17 @@ int game_of_lines(int gameMode, int columns, int rows, int connetToWin) {
     reset_arena(rows,columns,arena);
     print_arena(rows,columns,arena);
 
-    while(winnerfound) {
+
+
+    while(1) {
         scan_move(gameMode, rows, columns, arena);
         printf("__________________________\n");
+        int h = checkHorisontal(rows,columns,arena,connetToWin);
+            if(h==2||h==1){
+                printf("%d won the game", h);
+                break;
+            }
+
     }
 
 
@@ -134,6 +142,42 @@ int ai_move(int columns){
     return (rand()%columns);
 }
 
-bool winnerfound(){
-    true;
+bool winnerfound(int checkHorisontal){
+     if(checkHorisontal == 0)
+        false;
+     true;
+}
+int checkHorisontal(int rows, int columns, int(*board)[rows][columns], int wincon){
+    for (int i = 0; i <= columns; ++i) {
+        int count=0;
+        int winner=0;
+        for (int j = 0; j <= rows; ++j) {
+
+        if((*board)[i][j] == (*board)[i][j+1]&&((*board)[i][j] != 0)) {
+            count++;
+        }
+
+        if((count >= wincon) && ((*board)[i][j] != 0)) {
+            winner = (*board)[i][j];
+            return winner;
+        }
+        }
+    }
+}
+int checkVertcal(int rows, int columns, int(*board)[rows][columns], int wincon){
+    for (int i = 0; i < columns; ++i) {
+        int count=0;
+        int winner=0;
+        for (int j = 0; j < rows; ++j) {
+
+            if((*board)[j][i] == (*board)[j][i+1]&&((*board)[i][j] != 0)) {
+                count++;
+            }
+
+            if((count== wincon) && ((*board)[i][j] != 0)) {
+                winner = (*board)[j][i];
+                return winner;
+            }
+        }
+    }
 }
