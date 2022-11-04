@@ -1,11 +1,19 @@
+#include <stdio.h>
+#include <malloc.h>
+#include <time.h>
+#include <stdbool.h>
 
-void scan_setting(int *gameMode, int *gameSizeX, int *gameSizeY, int *connetToWin);
-int game_of_lines(int gameMode, int columns, int rows, int connetToWin);
-void reset_arena(int rows, int columns,int (*board)[rows][columns]);
-void print_arena(int rows, int columns,int (*board)[rows][columns]);
-void scan_move(int mode,int rows, int columns, int (*board)[rows][columns]);
-void update_arena(int player, int move, int rows,int columns, int(*board)[rows][move]);
-void check_if_valid(int move,int columns, int rows, int(*board)[rows][columns]);
-int ai_move(int columns);
-bool winnerfound(int checkHorisontal);
-int checkHorisontal(int rows, int columns, int(*board)[rows][columns], int wincon);
+int gameMode = 0, rows = 0, columns = 0, wincon = 0;
+
+void scan_setting();
+void game_of_lines();
+void print_arena(int (*arena)[rows][columns]);
+void reset_arena(int (*arena)[columns][rows]);
+int scan_move(int (*arena)[rows][columns]);
+void update_arena(int player, int *moveColumn, int *moveRows, int(*board)[rows][columns]);
+int ai_move();
+int check_horizontal(int moveColumn, int moveRows, int player, int (*board)[rows][columns]);
+int check_vertical(int player,int moveColumn, int (*board)[rows][columns]);
+int check_diagonal(int player, int moveColumn, int moveRows, int (*board)[rows][columns]);
+int check_diagonal2(int player, int moveColumn, int moveRows, int (*board)[rows][columns]);
+int winnerMessage(int player);
