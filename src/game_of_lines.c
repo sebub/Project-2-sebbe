@@ -1,10 +1,11 @@
 #include "game_of_lines.h"
 
-int main() {
+
+int main(void) {
     printf("%d %d %d %d\n", gameMode, rows, columns, wincon);
     scan_setting();
     game_of_lines();
-};
+}
 
 void scan_setting() { //Scans input for the game
     while (1) //Runs loop until user inputs valid game mode: 1 for singleplayer 2 for multiplayer
@@ -72,7 +73,7 @@ void reset_arena(int (*arena)[rows][columns]) {
     }
 }
 
-int scan_move(int (*arena)[rows][columns]) {
+void scan_move(int (*arena)[rows][columns]) {
     for (int i = 0; i < (rows * columns) / 2; ++i) {
         int moveColumn;
         int moveRow;
@@ -146,6 +147,10 @@ void update_arena(int player, int *moveColumn, int *moveRows, int(*board)[rows][
     }
 }
 
+int ai_move() {
+    return (rand() % columns);
+}
+
 int check_horizontal(int moveRows, int player, int (*board)[rows][columns]) {
     int count = 0;
     for (int j = 0; j < columns; ++j) {
@@ -183,9 +188,6 @@ int check_diagonal(int player, int moveRows, int moveColumns, int (*board)[rows]
             tempgird[i][j] = (*board)[i][j];
         }
     }
-    printf("_______");
-    print_arena(tempgird);
-    printf("_______");
     if (diagonal_left(player, moveRows, moveColumns, tempgird) == wincon) {
         return 1;
     }
@@ -199,10 +201,6 @@ int check_diagonal(int player, int moveRows, int moveColumns, int (*board)[rows]
         return 1;
     }
     return 0;
-}
-
-int ai_move() {
-    return (rand() % columns);
 }
 
 int checkWinner(int player, int moveRows, int moveColumns, int (*board)[rows][columns]) {
