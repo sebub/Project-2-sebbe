@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "WinCheck.h"
 
 int check_horizontal(int moveRows, int player, int (*board)[rows][columns]) {
@@ -17,7 +18,7 @@ int check_horizontal(int moveRows, int player, int (*board)[rows][columns]) {
 
 int check_vertical(int player, int moveColumn, int (*board)[rows][columns]) {
     int count = 0;
-    for (int j = 0; j < columns; ++j) {
+    for (int j = 0; j < rows; ++j) {
         if ((*board)[j][moveColumn] == player)
             count++;
         if (count == wincon) {
@@ -53,6 +54,7 @@ int check_diagonal(int player, int moveRows, int moveColumns, int (*board)[rows]
 }
 
 int checkWinner(int player, int moveRows, int moveColumns, int (*board)[rows][columns]) {
+    printf("%d\n", player);
     if ((check_horizontal(moveRows, player, board) == 1)
         || (check_vertical(player, moveColumns, board) == 1)
         || (check_diagonal(player, moveRows, moveColumns, board) == 1))
@@ -64,7 +66,6 @@ int checkWinner(int player, int moveRows, int moveColumns, int (*board)[rows][co
 int diagonal_left(int player, int moveRows, int moveColumns, int tempgird[rows][columns]) {
     if ((moveRows <= rows) && (moveRows >= 0) && ((moveColumns <= columns) && (moveColumns >= 0))) {
         if (tempgird[moveRows][moveColumns] == player) {
-            printf("Left: (%d,%d)\n", moveRows, moveColumns);
             tempgird[moveRows][moveColumns] = 0;
             return 1 +
                    diagonal_left(player, moveRows - 1, moveColumns - 1, tempgird) +
@@ -78,7 +79,6 @@ int diagonal_left(int player, int moveRows, int moveColumns, int tempgird[rows][
 int diagonal_right(int player, int moveRows, int moveColumns, int tempgird[rows][columns]) {
     if ((moveRows < rows) && (moveRows >= 0) && ((moveColumns < columns) && (moveColumns >= 0))) {
         if (tempgird[moveRows][moveColumns] == player) {
-            printf("Right: (%d,%d)\n", moveRows, moveColumns);
             tempgird[moveRows][moveColumns] = 0;
             return 1 +
                    diagonal_right(player, moveRows + 1, moveColumns - 1, tempgird) +

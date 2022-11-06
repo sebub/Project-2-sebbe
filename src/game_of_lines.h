@@ -2,6 +2,7 @@
 #include <malloc.h>
 #include <time.h>
 #include <stdbool.h>
+#include <math.h>
 #include "global.h"
 #include "WinCheck.h"
 
