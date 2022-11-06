@@ -3,14 +3,13 @@
 
 
 int main(void) {
-    srand(time(NULL));
+    srand(time(NULL)); //initiates srand to be able to make a simple AI.
 
-    scan_setting();
     game_of_lines();
 }
 
 void scan_setting() { //Scans input for the game
-    while (1) //Runs loop until user inputs valid game mode: 1 for singleplayer 2 for multiplayer
+    while (1)         //Runs loop until user inputs valid game mode: 1 for singleplayer 2 for multiplayer
     {
         printf("Enter 1 for singleplayer, enter 2 for multiplayer");
         fflush(stdin);
@@ -42,12 +41,19 @@ void scan_setting() { //Scans input for the game
 
 }//Takes user input to define gameMode: single or multiplayer, rows and columns in the game arena and how many you need to connect to win
 void game_of_lines() {
+    char playAgain = 'y';
+    while(playAgain != 'n'){
+    scan_setting();
     int (*arena)[rows][columns] = malloc(sizeof(int[rows][columns]));
 
     reset_arena(arena);
     print_arena(arena);
-    scan_move(arena);
-}
+    update_arena(arena);
+    printf("Want to play again?  y/n: ");
+    fflush(stdin);
+    scanf("%c", &playAgain);
+    }
+}//all the functionality of the game
 
 void print_arena(int (*arena)[rows][columns]) {
     for (int i = 0; i < columns; ++i) {
@@ -75,13 +81,13 @@ void reset_arena(int (*arena)[rows][columns]) {
     }
 }
 
-void scan_move(int (*arena)[rows][columns]) {
+void update_arena(int (*arena)[rows][columns]) {
     int k = 0;
     while(k < (rows * columns)) {
         int moveColumn;
         int moveRow;
         if (gameMode == 1) {
-            update_arena(1, &moveColumn, &moveRow, arena);
+            scan_move(1, &moveColumn, &moveRow, arena);
             k++;
             if (checkWinner(1, moveRow, moveColumn, arena) == 1) {
                 printf("You won!\n");
@@ -91,7 +97,7 @@ void scan_move(int (*arena)[rows][columns]) {
 
             if(k >= (rows * columns))
                 break;
-            update_arena(3, &moveColumn, &moveRow, arena);
+            scan_move(3, &moveColumn, &moveRow, arena);
             k++;
             if (checkWinner(3, moveRow, moveColumn, arena) == 3) {
                 printf("AI won you suck\n");
@@ -102,7 +108,7 @@ void scan_move(int (*arena)[rows][columns]) {
 
         }
         if (gameMode == 2) {
-            update_arena(1, &moveColumn, &moveRow, arena);
+            scan_move(1, &moveColumn, &moveRow, arena);
             k++;
             if (checkWinner(1, moveRow, moveColumn, arena) == 1) {
                 printf("player 1 won\n");
@@ -113,7 +119,7 @@ void scan_move(int (*arena)[rows][columns]) {
 
             if(k >= (rows * columns))
                 break;
-            update_arena(2, &moveColumn, &moveRow, arena);
+            scan_move(2, &moveColumn, &moveRow, arena);
             k++;
             if (checkWinner(2, moveRow, moveColumn, arena) == 2) {
                 printf("player 2 won\n");
@@ -126,7 +132,7 @@ void scan_move(int (*arena)[rows][columns]) {
     }
 }
 
-void update_arena(int player, int *moveColumn, int *moveRows, int(*board)[rows][columns]) {
+void scan_move(int player, int *moveColumn, int *moveRows, int(*board)[rows][columns]) {
     int i = 0;
     while (1) {
         if (player != 3)
