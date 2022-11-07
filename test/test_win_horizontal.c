@@ -60,4 +60,6 @@ int main() {
                       {1, 2, 1, 2}};
 
     assert(check_horizontal(1, 3, grid5) == 1);
+
+
 }

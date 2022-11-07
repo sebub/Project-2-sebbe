@@ -7,6 +7,7 @@ int check_horizontal(int moveRows, int player, int (*board)[rows][columns]) {
         if ((*board)[moveRows][j] == player)
             count++;
         if (count == wincon) {
+            printf("horizontal");
             return 1;
         }
         if ((*board)[moveRows][j] != player) {
@@ -22,6 +23,7 @@ int check_vertical(int player, int moveColumn, int (*board)[rows][columns]) {
         if ((*board)[j][moveColumn] == player)
             count++;
         if (count == wincon) {
+            printf("vertical");
             return 1;
         }
         if ((*board)[j][moveColumn] != player) {
@@ -39,6 +41,9 @@ int check_diagonal(int player, int moveRows, int moveColumns, int (*board)[rows]
         }
     }
     if (diagonal_left(player, moveRows, moveColumns, tempgird) == wincon) {
+        printf("(%d,%d)\n",moveColumns, moveRows);
+        printf("%d\n",wincon);
+        printf("left\n");
         return 1;
     }
 
@@ -48,13 +53,13 @@ int check_diagonal(int player, int moveRows, int moveColumns, int (*board)[rows]
         }
     }
     if (diagonal_right(player, moveRows, moveColumns, tempgird) == wincon) {
+        printf("right");
         return 1;
     }
     return 0;
 }
 
 int checkWinner(int player, int moveRows, int moveColumns, int (*board)[rows][columns]) {
-    printf("%d\n", player);
     if ((check_horizontal(moveRows, player, board) == 1)
         || (check_vertical(player, moveColumns, board) == 1)
         || (check_diagonal(player, moveRows, moveColumns, board) == 1))

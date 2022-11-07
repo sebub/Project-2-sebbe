@@ -45,11 +45,15 @@ int main(){
     assert(diagonal_left(1,1,0,grid4)==3);
 
 
+    //AI, last move placed (0,0): Expecting to find 3 connected pieces
     int grid5[4][4] = {{3, 0, 0, 0},
                        {3, 3, 3, 0},
                        {1, 1, 3, 0},
                        {1, 2, 1, 2}};
 
     assert(diagonal_left(3, 0,0, grid5) == 3);
+
+
+
 
 }
