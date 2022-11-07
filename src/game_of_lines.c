@@ -19,7 +19,7 @@ void scan_setting() { //Scans input for the game
 
     while (1) //Runs loop until user inputs columns greater than 2
     {
-        printf("Enter size of map");
+        printf("Enter size of map\n");
         printf("Columns:");
         fflush(stdin);
         scanf("%d", &columns);
@@ -57,17 +57,18 @@ void game_of_lines() {
 
 void print_arena(int (*arena)[rows][columns]) {
     for (int i = 0; i < columns; ++i) {
-        printf("|%d| ", i + 1);
+        printf("| %d |", i + 1);
     }
     printf("\n");
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < columns; ++j) {
-            if ((*arena)[i][j] == 1)
-                printf("|x| ");
+            if ((*arena)[i][j] == 1) {
+                printf("| x |");
+            }
             else if ((*arena)[i][j] == 2 || (*arena)[i][j] == 4) {
-                printf("|o| ");
+                printf("| o |");
             } else
-                printf("|_| ");
+                printf("| - |");
         }
         printf("\n");
     }
