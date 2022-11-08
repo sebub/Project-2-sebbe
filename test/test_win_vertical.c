@@ -17,6 +17,7 @@ int main(){
                       {1, 1, 2, 0},
                       {1, 2, 1, 2}};
 
+    //Player 1, last move placed column 0 : Expecting to find 3 connected pieces
     assert(check_vertical(1, 0, grid) == 1);
 
     int grid2[4][4] = {{0, 2, 0, 0},
@@ -24,6 +25,7 @@ int main(){
                        {1, 2, 2, 0},
                        {1, 1, 1, 2}};
 
+    //Player 2, last move placed column 1 : Expecting to find 3 connected pieces
     assert(check_vertical(2, 1, grid2) == 1);
 
 
@@ -38,6 +40,7 @@ int main(){
                        {1, 2},
                        {1, 2}};
 
+    //Player 2, last move placed column 1 : Expecting to find 6 connected pieces
     assert(check_vertical(2, 1, grid3) == 1);
 
 
@@ -48,6 +51,7 @@ int main(){
     int grid4[2][6] = {{0, 1, 1, 0, 0, 0},
                        {0, 2, 1, 2, 0, 0},};
 
+    //Player 1, last move placed column 2 : Expecting to find 6 connected pieces
     assert(check_vertical(1, 2, grid4) == 1);
 
     rows = 4;
@@ -59,6 +63,7 @@ int main(){
                        {3, 1, 2, 0},
                        {3, 2, 1, 2}};
 
+    //AI, last move placed column 0 : Expecting to find 3 connected pieces
     assert(check_vertical(3, 0, grid5) == 1);
 
 

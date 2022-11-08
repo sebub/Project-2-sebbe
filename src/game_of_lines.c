@@ -7,18 +7,35 @@ int main(void) {
     game_of_lines();
 }
 
-void scan_setting() { //Scans input for the game
-    while (1)         //Runs loop until user inputs valid game mode: 1 for singleplayer 2 for multiplayer
-    {
-        printf("Enter 1 for singleplayer, enter 2 for multiplayer");
+
+void game_of_lines() {
+    char playAgain = 'y';
+    while (playAgain != 'n') {
+        scan_setting();
+        int (*board)[rows][columns] = malloc(sizeof *board);
+
+        reset_board(board);
+        print_board(board);
+
+        update_board(board);
+
+        printf("Want to play again?  y/n: ");
         fflush(stdin);
+        scanf("%c", &playAgain);
+        free(board);
+    }
+}
+
+void scan_setting() {
+    while (1) {
+        printf("Enter 1 for singleplayer, enter 2 for multiplayer");
+        fflush(stdin);//clears buffer to make sure scanf is not skipped
         scanf("%d", &gameMode);
         if ((gameMode == 1) || (gameMode == 2))
             break;
     }
 
-    while (1) //Runs loop until user inputs columns greater than 2
-    {
+    while (1) {
         printf("Enter size of map\n");
         printf("Columns:");
         fflush(stdin);
@@ -26,8 +43,7 @@ void scan_setting() { //Scans input for the game
         if (columns > 1)
             break;
     }
-    while (1) //Runs loop until user inputs rows greater than 2
-    {
+    while (1) {
         printf("Rows:");
         fflush(stdin);
         scanf("%d", &rows);
@@ -38,34 +54,26 @@ void scan_setting() { //Scans input for the game
     printf("Enter number of connections to win:");
     scanf("%d", &wincon);
 
-}//Takes user input to define gameMode: single or multiplayer, rows and columns in the game arena and how many you need to connect to win
+}
 
-void game_of_lines() {
-    char playAgain = 'y';
-    while (playAgain != 'n') {
-        scan_setting();
-        int (*arena)[rows][columns] = malloc(sizeof(int[rows][columns]));
-
-        reset_arena(arena);
-        print_arena(arena);
-        update_arena(arena);
-        printf("Want to play again?  y/n: ");
-        fflush(stdin);
-        scanf("%c", &playAgain);
+void reset_board(int (*board)[rows][columns]) {
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            (*board)[i][j] = 0;
+        }
     }
-}//all the functionality of the game
+}
 
-void print_arena(int (*arena)[rows][columns]) {
+void print_board(int (*board)[rows][columns]) {
     for (int i = 0; i < columns; ++i) {
         printf("| %d |", i + 1);
     }
     printf("\n");
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < columns; ++j) {
-            if ((*arena)[i][j] == 1) {
+            if ((*board)[i][j] == 1) {
                 printf("| x |");
-            }
-            else if ((*arena)[i][j] == 2 || (*arena)[i][j] == 4) {
+            } else if ((*board)[i][j] == 2 || (*board)[i][j] == 4) {
                 printf("| o |");
             } else
                 printf("| - |");
@@ -74,69 +82,62 @@ void print_arena(int (*arena)[rows][columns]) {
     }
 }
 
-void reset_arena(int (*arena)[rows][columns]) {
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < columns; ++j) {
-            (*arena)[i][j] = 0;
-        }
-    }
-}
-
-void update_arena(int (*arena)[rows][columns]) {
-    int k = 0;
-    while (k < (rows * columns)) {
+void update_board(int (*board)[rows][columns]) {
+    int Tiecount = 0;
+    while (Tiecount < (rows * columns)) {
         int moveColumn;
         int moveRow;
         if (gameMode == 1) {
-            scan_move(1, &moveColumn, &moveRow, arena);
-            k++;
-            if (checkWinner(1, moveRow, moveColumn, arena) == 1) {
+            scan_move(1, &moveColumn, &moveRow, board);
+            Tiecount++;
+            if (checkWinner(1, moveRow, moveColumn, board) == 1) {
                 printf("You won!\n");
-                print_arena(arena);
+                print_board(board);
                 break;
             }
 
-            if (k >= (rows * columns)) {
+            if (Tiecount >= (rows * columns)) {
                 printf("its a tie!\n");
-                print_arena(arena);
+                print_board(board);
                 break;
             }
-            scan_move(4, &moveColumn, &moveRow, arena);
-            k++;
-            if (checkWinner(4, moveRow, moveColumn, arena) == 4) {
+            scan_move(4, &moveColumn, &moveRow, board);
+            Tiecount++;
+            if (checkWinner(4, moveRow, moveColumn, board) == 4) {
                 printf("AI won you suck\n");
-                print_arena(arena);
+                print_board(board);
                 break;
             }
-            print_arena(arena);
+            print_board(board);
 
         }
         if (gameMode == 2) {
-            scan_move(1, &moveColumn, &moveRow, arena);
-            k++;
-            if (checkWinner(1, moveRow, moveColumn, arena) == 1) {
+            scan_move(1, &moveColumn, &moveRow, board);
+            Tiecount++;
+            if (checkWinner(1, moveRow, moveColumn, board) == 1) {
                 printf("player 1 won\n");
-                print_arena(arena);
+                print_board(board);
                 break;
             }
-            print_arena(arena);
+            print_board(board);
 
-            if (k >= (rows * columns)) {
+            if (Tiecount >= (rows * columns)) {
                 printf("its a tie!\n");
-                print_arena(arena);
+                print_board(board);
                 break;
             }
-            scan_move(2, &moveColumn, &moveRow, arena);
-            k++;
-            if (checkWinner(2, moveRow, moveColumn, arena) == 2) {
+            scan_move(2, &moveColumn, &moveRow, board);
+            Tiecount++;
+            if (checkWinner(2, moveRow, moveColumn, board) == 2) {
                 printf("player 2 won\n");
-                print_arena(arena);
+                print_board(board);
                 break;
             }
-            print_arena(arena);
+            print_board(board);
         }
-        if (k >= (rows * columns)) {
-            printf("its a tie!\n");}
+        if (Tiecount >= (rows * columns)) {
+            printf("its a tie!\n");
+        }
     }
 }
 
@@ -152,19 +153,19 @@ void scan_move(int player, int *moveColumn, int *moveRows, int(*board)[rows][col
         if ((*moveColumn > columns) || (*moveColumn < 0)) {
             printf("Please choose valid column");
         } else {
-            if ((*board)[0][*moveColumn - 1] != 0) {
-               if (player != 4)
-                   printf("Row full please choose another one\n");
+            if ((*board)[0][*moveColumn - 1] != 0) {//If every element in chosen row is filled runs loop again
+                if (player != 4)
+                    printf("Row full please choose another one\n");
             } else
                 break;
         }
     }
     while (i <= rows) {
-        if ((*board)[rows - i - 1][*moveColumn - 1] == 0) {
-            (*board)[rows - i - 1][*moveColumn - 1] = player;
+        if ((*board)[rows - i - 1][*moveColumn - 1] == 0) {   //Checks value of each element in a column until it finds
+            (*board)[rows - i - 1][*moveColumn - 1] = player; //0 then replaces it with value of current player
 
-            *moveRows = rows - i - 1;
-            *moveColumn = *moveColumn - 1;
+            *moveRows = rows - i - 1;       //when value is replaced moveRows and moveColumn is defined to be able
+            *moveColumn = *moveColumn - 1;  //check this move have triggered a win
             break;
         }
         i++;
